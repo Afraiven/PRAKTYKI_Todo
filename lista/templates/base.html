@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <title>TODO List</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            max-width: 100vw;
+            height: 100vh;
+            font-family: 'Titillium Web', sans-serif;
+            text-align: center;
+            overflow-x: hidden;
+        }
+        *:focus {
+            outline: 0 !important;
+        }
+
+        h1 {
+            margin-top: 1vh;
+        }
+        #flex-container {
+            transition: filter 1s;
+            margin-left: 5vw;
+            margin-right: 5vw;
+            margin-top: 4vh;
+            height: auto;
+            width: 90vw;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: flex-start;
+            align-content: flex-start;
+        }
+
+        .kolumna {
+            width: 30%;
+            height: 100%;
+            min-height: 70vh;
+            border-radius: 25px;
+            padding: 1vw;
+        }
+        .kolumna_text {
+            width: 30%;
+            border-radius: 25px;
+        }
+
+        .todo {
+            background-color: rgba(212, 137, 51, 0.226);
+        }
+
+        .realization {
+            background-color: rgba(212, 188, 51, 0.226);
+        }
+        
+        .done {
+            background-color: rgba(115, 212, 51, 0.226);
+        }
+        
+        .element {
+            padding-left: 1.5vw;
+            padding-right: 1.5vw;
+            padding-bottom: 2vh;
+            padding-top: 2vh;
+            background-color: white;
+            border-radius: 25px;
+            width: 86%;
+            margin-left: 7%;
+            height: auto;
+            min-height: 10%;
+            font-size: 1.2em;
+            margin-bottom: 1vh;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+        }
+
+        .buttons {
+            float: right;
+            border-radius: 25px;
+            width: 18%;
+            height: auto;
+            min-height: 100%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+        }
+        
+        .edit img, .delete img, button img {
+            object-fit: cover;
+            width: 80%;
+            opacity: 0.7;
+            transition: opacity .3s;
+        }
+
+        button img {
+            width: 5%;
+        }
+
+        .delete {
+            color: red;
+        }
+
+        button, a, #submit, #submit_projekt  {
+            border: none;
+            background-color: #fff;
+            height: auto;
+            width: 50%;
+            border-radius: 25px;
+        }
+        .element p {
+            color: rgba(0, 0, 0, 0.651);
+            text-align: left;
+        }
+        .element h4 {
+            text-align: left;
+        }
+        .element span {
+            text-align: left;
+            display: block;
+            font-size: 0.8em !important;
+            color:rgba(0, 0, 0, 0.473);
+        }
+        img:hover , a:hover img{
+            opacity: 1;
+        }
+        
+        #formularz {
+            color: white;
+            font-size: 1.7em;
+            width: 70vw;
+            height: 80vh;
+            position: absolute;
+            top: -120vh;
+            background-color: rgba(14, 14, 14, 0.363);
+            z-index: 11;
+            left: 50%;
+            transform: translate(-50%,0);
+            border-radius: 25px;
+            transition: top 1s;
+            text-align: left;
+            padding-left: 15%;
+        }
+        #formularz_projekt {
+            color: white;
+            font-size: 1.7em;
+            width: 70vw;
+            height: 80vh;
+            position: absolute;
+            top: -120vh;
+            background-color: rgba(14, 14, 14, 0.363);
+            z-index: 11;
+            left: 50%;
+            transform: translate(-50%,0);
+            border-radius: 25px;
+            transition: top 1s;
+            text-align: left;
+            padding-left: 15%;
+        }
+
+        input, select, textarea {
+            width: 70% !important;
+            margin-bottom: 2vh;
+        }
+        .show {
+            top: 10vh !important;
+        }
+
+        .body_blur {
+            filter: blur(.4rem);
+        }
+
+        form {
+            margin-top: 2vh;
+        }
+        .nav {
+            margin-top: 5vh;
+        }
+        #formularz_title {
+            display: inline;
+        }
+        #formularz_title_projekt {
+            display: inline;
+            margin-bottom: 2vh;
+        }
+        #footer {
+            width: 100vw;
+            height: 10vh;
+            margin-bottom: 10vh;
+        }
+
+        .close_formularz {
+            float: right;
+            width: 5% !important;
+            height: 5% !important;
+            margin-left: 76%;
+        }
+        .close_formularz_projekt {
+            float: right;
+            width: 5% !important;
+            height: 5% !important;
+            margin-left: 63%;
+        }
+        .wyloguj {
+            position: absolute;
+            top: 2vh;
+            right: 11vh;
+            width: 10vw;
+        }
+        .high {
+            background-color:rgb(255, 255, 255);
+        }
+        .high a {
+            background-color:rgba(248, 91, 91, 0);
+        }
+        .normal {
+            background-color:rgba(255, 255, 255, 0.6);
+        }
+        .normal a {
+            background-color:rgba(255, 255, 255, 0);
+        }
+        .low {
+            background-color:rgba(255, 255, 255, 0.4);
+        }
+        .low a {
+            background-color:rgb(165, 165, 165, 0);
+        }
+        .white {
+            display: inline;
+            font-weight: 600;
+            color: rgb(199, 0, 0);
+        }
+
+        .projekt {
+            border-radius: 25px;
+            padding-top: 1vh;
+            padding-bottom: 1vh;
+        }
+        .grouper {
+            text-align: left;
+            padding-left: 1vw;
+            margin-top: 1vh;
+        }
+        button .folder {
+            margin-left: 1vw;
+            width: 6%;
+        }
+
+        .smol img{
+            height: 1vw;
+            width: auto;
+        }
+
+        .smol {
+            background-color: rgba(14, 14, 14, 0);
+        }
+        .edytor_projektu {
+            background-color: rgba(255, 255, 255, 0.329);
+            width: 38.7vw;
+            margin-top: .5vh;
+            border-radius: 10px;
+            padding-left: 1vw;
+        }
+        .smollers {
+            display: inline;
+            float: right;
+            width: 10%;
+        }
+
+        .chart {
+            width: 15vw;
+            float: left;
+            margin-left: 6vw;
+        }
+        .chart_container {
+            margin-top: 4vh;
+        }
+        .login_container {
+            position: absolute;
+            top: 2vh;
+            right: 11vh;
+            width: 21vw;
+        }
+        .login_container a{
+            width: 10vw;
+        }
+        @keyframes disapear {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+        .alert {
+            position: absolute !important;
+            top: 0;
+            left: 0 !important;
+            width: 100vw !important;
+            animation: disapear 1.5s 1.5s ease forwards;
+        }
+    </style>
+</head>
+{% for message in messages %}
+<div class="alert alert-success" role="alert">{{ message }}</div>
+{% endfor %}
+<body id="body">
+    <h1 id="header">TODO list{% if user.is_authenticated %} - {{ request.user|title }}{% endif %}</h1>
+    {% if user.is_authenticated %}
+    <button id="show"><img onclick="show_formularz(0, '', '', '', '', '')" src="https://i.ibb.co/Lh2zty2/obraz-2022-03-17-204253.png" alt=""><img class="folder" onclick="show_formularz_projekt(0, '', '')" src="https://i.ibb.co/DLg20tG/obraz-2022-03-23-140352.png" alt=""></button>
+    <a id="show2" class="btn btn-outline-success wyloguj" type="button" href="/logout">Wyloguj</a>
+    {% else %}
+    <div class="login_container">
+        <a id="show2" class="btn btn-outline-success" type="button" href="/login">Zaloguj</a>
+        <a id="show3" class="btn btn-outline-success" type="button" href="{% url 'register' %}">Zarejestruj</a>
+    </div>
+    {% endif %}	
+
+    <!-- formularz zadanie-->
+    <div id="formularz">
+        <div class="nav">
+        <h1 id="formularz_title">Zadanie</h1>
+        <button class="btn btn-outline-danger close_formularz" onclick="close_formularz()">X</button>
+        </div>
+        <form id="form" action="" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input id="submit" onclick="close_formularz()" type="submit" value="Zatwierdź">
+        </form>
+    </div>
+
+    <!-- formularz projekt -->
+    <div id="formularz_projekt">
+        <div class="nav">
+        <h1 id="formularz_title_projekt">Kreator projektu</h1>
+        <button class="btn btn-outline-danger close_formularz_projekt" onclick="close_formularz_projekt()">X</button>
+        </div>
+        {% for projekt in projekty %}
+            <div class="edytor_projektu">
+            {{ projekt }}
+            <div class="smollers">
+                <a class="smol" onclick="show_formularz_projekt('{{ projekt.id }}', '{{ projekt.nazwa }}', '{{ projekt.motyw }}')"><img src="https://i.ibb.co/wcKqMgs/write.png" alt=""></a>
+                <a class="smol" href="{% url 'delete_projekt' projekt.id %}"><img src="https://i.ibb.co/qBNTrwW/remove.png" alt=""></a>
+            </div>
+            </div>
+        {% endfor %} 
+        <form id="form_projekt" action="" method="post">
+            {% csrf_token %}
+            {{ form_projekt }}
+            <input id="submit_projekt" onclick="close_formularz_projekt()" type="submit" value="Zatwierdź">
+        </form>
+
+       
+    </div>
+
+    <!-- content -->
+    <div id="flex-container">
+        <div class="kolumna_text"><h3>Do zrobienia</h3></div>
+        <div class="kolumna_text"><h3>W realizacji</h3></div>
+        <div class="kolumna_text"><h3>Wykonane</h3></div>
+        <div class="kolumna todo">
+            {% regroup todo_do_zrobienia by projekt as todo_do_zrobieniaX %}
+            {% for projekt in todo_do_zrobieniaX %}
+                {% if projekt.grouper.autor == request.user %}{% if projekt.grouper is not NULL %} {% if projekt.list|length > 0 %} <h5 class="grouper">{{ projekt.grouper }}</h5> {% endif %}{% endif %}
+                    <div class="projekt" id="todo{{ projekt.grouper }}" style="background-color: {{ projekt.grouper.motyw }};">
+                    {% for zadanie in projekt.list %}
+                        {% if zadanie.status == "Do zrobienia" and zadanie.autor == request.user %}
+                        <div class="element todo{{ projekt.grouper }} {% if zadanie.priorytet == '3' %} high {% endif %}{% if zadanie.priorytet == '2' %} normal {% endif %}{% if zadanie.priorytet == '1' %} low {% endif %}">
+                            <div class="buttons">
+                                <a class="edit" onclick="show_formularz('{{ zadanie.id }}', '{{ zadanie.nazwa }}', '{{ zadanie.opis }}', '{{ zadanie.status }}', '{{ zadanie.priorytet }}', '{{ zadanie.projekt.id }}')"><img src="https://i.ibb.co/wcKqMgs/write.png" alt=""></a>
+                                <a class="delete" href="{% url 'delete' zadanie.id %}"><img src="https://i.ibb.co/qBNTrwW/remove.png" alt=""></a>
+                            </div>
+                            <h4 class="nazwa">
+                                {% if zadanie.priorytet == '3' %}<div class="white"> ! </div>{% endif %}{{ zadanie.nazwa }}
+                            </h4> 
+                            <p>
+                                {{ zadanie.opis }}
+                            </p>
+                            <span>{{ zadanie.data }}</span>
+                        </div>
+                        {% endif %}
+                    {% endfor %} 
+                </div>
+                
+                {% endif %}
+            {% endfor %} 
+        </div>
+        <div class="kolumna realization">
+            {% regroup todo_realizowane by projekt as todo_realizowaneX %}
+            {% for projekt in todo_realizowaneX %}
+                {% if projekt.grouper.autor == request.user %}{% if projekt.grouper is not NULL %} {% if projekt.list|length > 0 %} <h5 class="grouper">{{ projekt.grouper }}</h5> {% endif %}{% endif %}
+                    <div class="projekt" id="realization{{ projekt.grouper }}" style="background-color: {{ projekt.grouper.motyw }};">
+                    {% for zadanie in projekt.list %}
+                        {% if zadanie.status == "Realizowane" and zadanie.autor == request.user %}
+                        <div class="element realization{{ projekt.grouper }} {% if zadanie.priorytet == '3' %} high {% endif %}{% if zadanie.priorytet == '2' %} normal {% endif %}{% if zadanie.priorytet == '1' %} low {% endif %}">
+                            <div class="buttons">
+                                <a class="edit" onclick="show_formularz('{{ zadanie.id }}', '{{ zadanie.nazwa }}', '{{ zadanie.opis }}', '{{ zadanie.status }}', '{{ zadanie.priorytet }}', '{{ zadanie.projekt.id }}')"><img src="https://i.ibb.co/wcKqMgs/write.png" alt=""></a>
+                                <a class="delete" href="{% url 'delete' zadanie.id %}"><img src="https://i.ibb.co/qBNTrwW/remove.png" alt=""></a>
+                            </div>
+                            <h4 class="nazwa">
+                                {% if zadanie.priorytet == '3' %}<div class="white"> ! </div>{% endif %}{{ zadanie.nazwa }}
+                            </h4> 
+                            <p>
+                                {{ zadanie.opis }}
+                            </p>
+                            <span>{{ zadanie.data }}</span>
+                        </div>
+                        {% endif %}
+                    {% endfor %} 
+                </div>
+                {% endif %}
+            {% endfor %} 
+        </div>
+        <div class="kolumna done">
+            {% regroup todo_wykonane by projekt as todo_wykonaneX %}
+            {% for projekt in todo_wykonaneX %}
+                {% if projekt.grouper.autor == request.user %}{% if projekt.grouper is not NULL %} {% if projekt.list|length > 0 %} <h5 class="grouper">{{ projekt.grouper }}</h5> {% endif %}{% endif %}
+                    <div class="projekt" style="background-color: {{ projekt.grouper.motyw }};">
+                    {% for zadanie in projekt.list %}
+                        {% if zadanie.status == "Wykonane" and zadanie.autor == request.user %}
+                        <div class="element done{{ projekt.grouper }} {% if zadanie.priorytet == '3' %} high {% endif %}{% if zadanie.priorytet == '2' %} normal {% endif %}{% if zadanie.priorytet == '1' %} low {% endif %}">
+                            <div class="buttons">
+                                <a class="edit" onclick="show_formularz('{{ zadanie.id }}', '{{ zadanie.nazwa }}', '{{ zadanie.opis }}', '{{ zadanie.status }}', '{{ zadanie.priorytet }}', '{{ zadanie.projekt.id }}')"><img src="https://i.ibb.co/wcKqMgs/write.png" alt=""></a>
+                                <a class="delete" href="{% url 'delete' zadanie.id %}"><img src="https://i.ibb.co/qBNTrwW/remove.png" alt=""></a>
+                            </div>
+                            <h4 class="nazwa">
+                                {% if zadanie.priorytet == '3' %}<div class="white"> ! </div>{% endif %}{{ zadanie.nazwa }}
+                            </h4> 
+                            <p>
+                                {{ zadanie.opis }}
+                            </p>
+                            <span>{{ zadanie.data }}</span>
+                        </div>
+                        {% endif %}
+                    {% endfor %} 
+                </div>
+                {% endif %}  
+            {% endfor %} 
+        </div>
+    </div>
+
+    <script>
+        function new_chart(id, nazwa) {
+            var ctx = document.getElementById(id).getContext('2d');
+            todo = "todo"+nazwa;
+            var todo_count = document.getElementsByClassName(todo).length;
+            realization = "realization"+nazwa;
+            var realization_count = document.getElementsByClassName(realization).length;
+            done = "done"+nazwa;
+            var done_count = document.getElementsByClassName(done).length;
+            if ( done_count == 0) {
+                var value = 0
+            } else if ( todo_count + realization_count == 0 ) {
+                var value = 100
+            } else {
+                var value = 100 - ( todo_count + realization_count ) / ( todo_count + realization_count + done_count) * 100
+            }
+            value = value + "%"
+            document.getElementById(nazwa).innerHTML = value
+            const myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Do zrobienia', 'Realizacja', 'Wykonane'],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [todo_count, realization_count, done_count],
+                        backgroundColor: [
+                            'rgba(212, 137, 51, 0.226)',
+                            'rgba(212, 188, 51, 0.226)',
+                            'rgba(115, 212, 51, 0.226)',
+                        ],
+                        borderColor: [
+                            'rgba(0, 0, 0, 1)',
+                            'rgba(0, 0, 0, 1)',
+                            'rgba(0, 0, 0, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                }
+            });
+        }
+    </script>
+
+    <div class="chart_container"></div>
+        {% for projekt in projekty %}
+        {% if projekt.autor == request.user %}
+        <div class="chart">
+            <h2>{{ projekt }}</h2><canvas id="{{ projekt.id }}" width="400" height="400"></canvas>
+            
+            <h5 id="{{ projekt.nazwa }}"></h5>
+        </div>
+        <script>
+            new_chart("{{ projekt.id }}", "{{ projekt.nazwa }}");
+        </script>
+        {% endif %}
+        {% endfor %}
+    </div>
+    
+    <div id="footer"></div>
+    <script>
+        function show_formularz(id, name, opis, status, priorytet, projekt) {
+            form = document.getElementById("form")
+            if (id == 0){
+                // jesli id == 0, otworz formularz dodający
+                form.action = "{% url 'dodaj' %}"
+            } else {
+                // jesli id == 0, otworz formularz edytujący
+                document.getElementById("name").value = name;
+                document.getElementById("opis").value = opis;
+                document.getElementById("status").value = status;
+                document.getElementById("priority").value = priorytet;
+                document.getElementById("projekt").value = projekt;
+                // ustaw metoda formularza na edit
+                form.action = "{% url 'edit' id=0 %}".replace('0', id);
+            }
+
+            // animacje
+            formularz = document.getElementById("formularz")
+            flex_container = document.getElementById("flex-container")
+            header = document.getElementById("header")
+            show = document.getElementById("show")
+            show2 = document.getElementById("show2")
+            formularz.classList.add("show")
+            flex_container.classList.add("body_blur")
+            show.classList.add("body_blur")
+            show2.classList.add("body_blur")
+            header.classList.add("body_blur")
+        }
+
+        function show_formularz_projekt(id, name, motyw) {
+            form = document.getElementById("form_projekt")
+            if (id == 0){
+                form.action = "{% url 'dodaj_projekt' %}"
+            } else {
+                document.getElementById("name_projekt").value = name;
+                document.getElementById("motyw").value = motyw;
+                form.action = "{% url 'edit_projekt' id=0 %}".replace('0', id);
+            }
+            formularz = document.getElementById("formularz_projekt")
+            flex_container = document.getElementById("flex-container")
+            header = document.getElementById("header")
+            show = document.getElementById("show")
+            show2 = document.getElementById("show2")
+            formularz.classList.add("show")
+            flex_container.classList.add("body_blur")
+            show.classList.add("body_blur")
+            show2.classList.add("body_blur")
+            header.classList.add("body_blur")
+        }
+
+        function close_formularz() {
+            formularz = document.getElementById("formularz")
+            flex_container = document.getElementById("flex-container")
+            show = document.getElementById("show")
+            show2 = document.getElementById("show2")
+            header = document.getElementById("header")
+            formularz.classList.remove("show")
+            show.classList.remove("body_blur")
+            show2.classList.remove("body_blur")
+            flex_container.classList.remove("body_blur")
+            header.classList.remove("body_blur")
+        }
+
+        function close_formularz_projekt() {
+            formularz = document.getElementById("formularz_projekt")
+            flex_container = document.getElementById("flex-container")
+            show = document.getElementById("show")
+            show2 = document.getElementById("show2")
+            header = document.getElementById("header")
+            formularz.classList.remove("show")
+            show.classList.remove("body_blur")
+            show2.classList.remove("body_blur")
+            flex_container.classList.remove("body_blur")
+            header.classList.remove("body_blur")
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
